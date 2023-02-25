@@ -5,6 +5,8 @@ apis/index.ts
 index.ts
 models/Article.ts
 models/ListArticleResponse.ts
+models/UnauthorizedResponse.ts
+models/V1AuthSignInRequest.ts
 models/V1AuthSignUpRequest.ts
 models/index.ts
 runtime.ts

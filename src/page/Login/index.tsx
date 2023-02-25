@@ -1,23 +1,24 @@
 import { useState } from 'react';
 import { useRecoilState } from 'recoil';
 import { FormControl, FormLabel, Input, Button, Box } from '@chakra-ui/react';
-import type { V1AuthSignInRequest } from '../../openapi/apis/AuthApi';
+import type { V1AuthSignInOperationRequest } from '../../openapi/apis/AuthApi';
 import { authApiClient } from '../../api/client';
 import { isLoggedInState } from '../../recoil/isLoggedIn';
+import { generateKey } from '../../encrypt';
+import { savePrivateKey } from '../../store';
 
 export function Login() {
-    const [isLoggedIn, setIsLoggedIn] = useRecoilState(isLoggedInState);
+    const [_, setIsLoggedIn] = useRecoilState(isLoggedInState);
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [showError, setShowError] = useState(false);
 
     const login = async (email: string, password: string) => {
-        const request: V1AuthSignInRequest = {
-            v1AuthSignUpRequest: {
-                email,
-                password,
-            },
+        const keys = await generateKey();
+        const request: V1AuthSignInOperationRequest = {
+            v1AuthSignInRequest: { email, password, publicKey: keys.publicKey },
         };
+        savePrivateKey(keys.privateKey);
 
         await authApiClient
             .v1AuthSignIn(request)
