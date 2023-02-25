@@ -14,6 +14,7 @@ export const articleApiClient = new ArticleApi(
 export const authApiClient = new AuthApi(
     new Configuration({
         basePath: (import.meta.env.VITE_SERVICE_ENDPOINT as string) + '/api',
+        credentials: 'include',
         headers: {
             'Content-Type': 'application/json',
         },
