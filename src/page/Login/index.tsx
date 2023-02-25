@@ -16,7 +16,7 @@ export function Login() {
     const login = async (email: string, password: string) => {
         const keys = await generateKey();
         const request: V1AuthSignInOperationRequest = {
-            v1AuthSignInRequest: { email, password, publicKey: keys.publicKey },
+            v1AuthSignInRequest: { email, password, publicKey: btoa(keys.publicKey) },
         };
         savePrivateKey(keys.privateKey);
 
