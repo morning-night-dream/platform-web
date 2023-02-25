@@ -1,20 +1,12 @@
 type Key = {
-    publicKey: string;
-    privateKey: string;
+    publicKeyStr: string;
+    publicKey: CryptoKey;
+    privateKeyStr: string;
+    privateKey: CryptoKey;
 };
 
 function arrayBufferToBinaryString(arrayBuffer: ArrayBuffer) {
     return String.fromCharCode.apply(null, new Uint8Array(arrayBuffer) as unknown as number[]);
-}
-
-export function binaryStringToArrayBuffer(string: string) {
-    const buf = new ArrayBuffer(string.length * 2); // 2 bytes for each char
-    const bufView = new Uint8Array(buf);
-    for (let i = 0, stringLength = string.length; i < stringLength; i++) {
-        bufView[i] = string.charCodeAt(i);
-    }
-
-    return buf;
 }
 
 export async function generateKey(): Promise<Key> {
@@ -27,15 +19,17 @@ export async function generateKey(): Promise<Key> {
 
     const keys = await crypto.subtle.generateKey(ec, true, ['sign', 'verify']);
 
-    const publicKey = await crypto.subtle.exportKey('spki', keys.publicKey).then((result) => {
+    const publicKeyStr = await crypto.subtle.exportKey('spki', keys.publicKey).then((result) => {
         return arrayBufferToBinaryString(result);
     });
-    const privateKey = await crypto.subtle.exportKey('pkcs8', keys.privateKey).then((result) => {
+    const privateKeyStr = await crypto.subtle.exportKey('pkcs8', keys.privateKey).then((result) => {
         return arrayBufferToBinaryString(result);
     });
 
     return {
-        publicKey,
-        privateKey,
+        publicKey: keys.publicKey,
+        publicKeyStr: publicKeyStr,
+        privateKey: keys.privateKey,
+        privateKeyStr: privateKeyStr,
     };
 }
