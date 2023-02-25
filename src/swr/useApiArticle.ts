@@ -2,7 +2,7 @@ import useSWR, { useSWRConfig } from 'swr';
 
 import type { V1ListArticlesRequest } from '../openapi/apis/ArticleApi';
 import type { Article } from '../openapi/models';
-import { client } from './client';
+import { articleApiClient } from './client';
 
 // 1回に取得する記事の数
 const articlesPerPage = 20;
@@ -25,7 +25,7 @@ export const useListArticles = () => {
         pageToken: articlesState.currentIndex ?? '',
     };
 
-    const fetcher = async () => client.v1ListArticles(request);
+    const fetcher = async () => articleApiClient.v1ListArticles(request);
     const { data } = useSWR(key, fetcher);
 
     const fetchedArticles = data?.articles ?? [];
