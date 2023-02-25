@@ -38,7 +38,7 @@ export function Login() {
 
         const signRequest: V1SignRequest = {
             code: "test",
-            signature: signedString,
+            signature: btoa(signedString),
         };
         await authApiClient.v1Sign(signRequest);
     };
