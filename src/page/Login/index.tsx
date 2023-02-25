@@ -1,9 +1,12 @@
 import { useState } from 'react';
+import { useRecoilState } from 'recoil';
 import { FormControl, FormLabel, Input, Button, Box } from '@chakra-ui/react';
 import type { V1AuthSignInRequest } from '../../openapi/apis/AuthApi';
 import { authApiClient } from '../../api/client';
+import { isLoggedInState } from '../../recoil/isLoggedIn';
 
 export function Login() {
+    const [isLoggedIn, setIsLoggedIn] = useRecoilState(isLoggedInState);
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [showError, setShowError] = useState(false);
@@ -16,9 +19,14 @@ export function Login() {
             },
         };
 
-        await authApiClient.v1AuthSignIn(request).catch((_error) => {
-            setShowError(true);
-        });
+        await authApiClient
+            .v1AuthSignIn(request)
+            .then(() => {
+                setIsLoggedIn(true);
+            })
+            .catch((_error) => {
+                setShowError(true);
+            });
     };
 
     const verify = async () => {
