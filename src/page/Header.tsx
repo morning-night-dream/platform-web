@@ -5,7 +5,7 @@ export type HeaderProps = Record<string, unknown>;
 
 export function Header(props: HeaderProps) {
     const verify = async () => {
-        authApiClient.v1AuthVerify();
+        await authApiClient.v1AuthVerify();
     };
 
     return (
