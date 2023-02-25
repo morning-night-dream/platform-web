@@ -18,6 +18,7 @@ export function Login() {
         const request: V1AuthSignInOperationRequest = {
             v1AuthSignInRequest: { email, password, publicKey: btoa(keys.publicKey) },
         };
+
         savePrivateKey(keys.privateKey);
 
         await authApiClient
@@ -28,6 +29,8 @@ export function Login() {
             .catch((_error) => {
                 setShowError(true);
             });
+        
+
     };
 
     const verify = async () => {

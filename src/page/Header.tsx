@@ -1,4 +1,4 @@
-import { Flex, Divider, Heading, Image, Center, Text, Spacer } from '@chakra-ui/react';
+import { Flex, Divider, Heading, Image, Center, Text, Spacer, Button } from '@chakra-ui/react';
 
 export type HeaderProps = Record<string, unknown>;
 
@@ -14,6 +14,7 @@ export function Header(props: HeaderProps) {
                         </Center>
                     </Heading>
                     <Spacer />
+                    <Button>sign</Button>
                 </Flex>
             </Center>
             <Divider />
