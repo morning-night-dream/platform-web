@@ -1,13 +1,8 @@
-import { Flex, Divider, Heading, Image, Center, Text, Button, Spacer } from '@chakra-ui/react';
-import { authApiClient } from '../api/client';
+import { Flex, Divider, Heading, Image, Center, Text, Spacer } from '@chakra-ui/react';
 
 export type HeaderProps = Record<string, unknown>;
 
 export function Header(props: HeaderProps) {
-    const verify = async () => {
-        await authApiClient.v1AuthVerify();
-    };
-
     return (
         <>
             <Center>
@@ -19,7 +14,6 @@ export function Header(props: HeaderProps) {
                         </Center>
                     </Heading>
                     <Spacer />
-                    <Button onClick={async () => verify()}>Verify</Button>
                 </Flex>
             </Center>
             <Divider />
