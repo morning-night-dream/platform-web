@@ -1,0 +1,53 @@
+{
+    "name": "platform-web",
+    "private": true,
+    "version": "0.0.1",
+    "type": "module",
+    "scripts": {
+        "dev": "vite",
+        "build": "tsc && vite build",
+        "preview": "vite preview",
+        "xo": "xo --fix",
+        "setup": "echo VITE_SERVICE_ENDPOINT=${VITE_SERVICE_ENDPOINT} > .env.local",
+        "openapi": "./openapi.sh"
+    },
+    "dependencies": {
+        "@bufbuild/connect-web": "0.7.0",
+        "@bufbuild/protobuf": "1.0.0",
+        "@chakra-ui/icons": "2.0.17",
+        "@chakra-ui/react": "2.4.9",
+        "@emotion/react": "11.10.5",
+        "@emotion/styled": "11.10.5",
+        "framer-motion": "9.0.1",
+        "react": "18.2.0",
+        "react-dom": "18.2.0",
+        "swr": "2.0.3"
+    },
+    "devDependencies": {
+        "@types/react": "18.0.27",
+        "@types/react-dom": "18.0.10",
+        "@vitejs/plugin-react": "3.1.0",
+        "eslint-config-xo-react": "0.27.0",
+        "eslint-plugin-react": "7.32.2",
+        "eslint-plugin-react-hooks": "4.6.0",
+        "typescript": "4.9.5",
+        "vite": "4.1.1",
+        "xo": "0.53.1"
+    },
+    "xo": {
+        "extends": "xo-react",
+        "space": true,
+        "rules": {
+            "react/react-in-jsx-scope": "off",
+            "unicorn/filename-case": "off",
+            "import/extensions": "off",
+            "unicorn/import-style": "off",
+            "n/file-extension-in-import": "off"
+        },
+        "ignores": [
+            "src/vite-env.d.ts",
+            "src/openapi/*"
+        ],
+        "prettier": true
+    }
+}
