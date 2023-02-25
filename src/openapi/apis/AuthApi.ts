@@ -42,6 +42,7 @@ export interface V1AuthSignUpOperationRequest {
 
 export interface V1SignRequest {
     code: string;
+    signature: string;
 }
 
 /**
@@ -215,10 +216,18 @@ export class AuthApi extends runtime.BaseAPI {
             throw new runtime.RequiredError('code','Required parameter requestParameters.code was null or undefined when calling v1Sign.');
         }
 
+        if (requestParameters.signature === null || requestParameters.signature === undefined) {
+            throw new runtime.RequiredError('signature','Required parameter requestParameters.signature was null or undefined when calling v1Sign.');
+        }
+
         const queryParameters: any = {};
 
         if (requestParameters.code !== undefined) {
             queryParameters['code'] = requestParameters.code;
+        }
+
+        if (requestParameters.signature !== undefined) {
+            queryParameters['signature'] = requestParameters.signature;
         }
 
         const headerParameters: runtime.HTTPHeaders = {};

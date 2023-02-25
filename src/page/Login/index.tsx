@@ -37,7 +37,8 @@ export function Login() {
         const signedString = new TextDecoder().decode(signedStringArrayBuffer);
 
         const signRequest: V1SignRequest = {
-            code: signedString,
+            code: "test",
+            signature: signedString,
         };
         await authApiClient.v1Sign(signRequest);
     };
