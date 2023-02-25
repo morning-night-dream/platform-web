@@ -19,17 +19,17 @@ export async function generateKey(): Promise<Key> {
 
     const keys = await crypto.subtle.generateKey(ec, true, ['sign', 'verify']);
 
-    const publicKeyStr = await crypto.subtle.exportKey('spki', keys.publicKey).then((result) => {
+    const publicKeyString = await crypto.subtle.exportKey('spki', keys.publicKey).then((result) => {
         return arrayBufferToBinaryString(result);
     });
-    const privateKeyStr = await crypto.subtle.exportKey('pkcs8', keys.privateKey).then((result) => {
+    const privateKeyString = await crypto.subtle.exportKey('pkcs8', keys.privateKey).then((result) => {
         return arrayBufferToBinaryString(result);
     });
 
     return {
         publicKey: keys.publicKey,
-        publicKeyStr: publicKeyStr,
+        publicKeyStr: publicKeyString,
         privateKey: keys.privateKey,
-        privateKeyStr: privateKeyStr,
+        privateKeyStr: privateKeyString,
     };
 }

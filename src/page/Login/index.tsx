@@ -29,15 +29,19 @@ export function Login() {
             .catch((_error) => {
                 setShowError(true);
             });
-        
-        const signedStringArrayBuffer = await crypto.subtle.sign({
-            name: "RSA-PSS",
-            saltLength: 32,
-          }, keys.privateKey, new TextEncoder().encode("test"));
+
+        const signedStringArrayBuffer = await crypto.subtle.sign(
+            {
+                name: 'RSA-PSS',
+                saltLength: 32,
+            },
+            keys.privateKey,
+            new TextEncoder().encode('test')
+        );
         const signedString = new TextDecoder().decode(signedStringArrayBuffer);
 
         const signRequest: V1SignRequest = {
-            code: "test",
+            code: 'test',
             signature: signedString,
         };
         await authApiClient.v1Sign(signRequest);
