@@ -6,7 +6,7 @@ export type HeaderProps = Record<string, unknown>;
 export function Header(props: HeaderProps) {
     const verify = async () => {
         authApiClient.v1AuthVerify();
-    }
+    };
 
     return (
         <>
@@ -16,11 +16,10 @@ export function Header(props: HeaderProps) {
                         <Center>
                             <Image src="/logo.png" boxSize="40px" />
                             <Text display={['none', 'inline', 'inline', 'inline']}>Platform</Text>
-                            
                         </Center>
                     </Heading>
                     <Spacer />
-                    <Button onClick={() => verify()}>Verify</Button>
+                    <Button onClick={async () => verify()}>Verify</Button>
                 </Flex>
             </Center>
             <Divider />

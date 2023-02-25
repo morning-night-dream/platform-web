@@ -25,10 +25,6 @@ export function Login() {
         });
     }
 
-    const verify = async () => {
-        authApiClient.v1AuthVerify();
-    }
-
     return (
         <>
             <FormControl id="email">
@@ -41,7 +37,6 @@ export function Login() {
             </FormControl>
             {showError? <Box>email or password is incorrect</Box> : <></>}
             <Button onClick={() => login(email, password)}>Login</Button>
-            <Button onClick={() => verify()}>Verify</Button>
         </>
     );
 }
