@@ -17,13 +17,13 @@ const router = createBrowserRouter([
 ]);
 
 function App() {
-    const loggedIn = Boolean(getCookie('UID'));
+    const loggedIn = () => Boolean(getCookie('UID'));
     return (
         <ChakraProvider theme={theme}>
             <BrowserRouter>
                 <Routes>
-                    <Route path="/login" element={<Login />} />
-                    <Route path="/" element={loggedIn ? <Article /> : <Navigate to="/login" />} />
+                    <Route path="/login" element={loggedIn() ? <Article /> : <Login />} />
+                    <Route path="/" element={loggedIn() ? <Article /> : <Navigate to="/login" />} />
                 </Routes>
             </BrowserRouter>
         </ChakraProvider>

@@ -5,7 +5,6 @@ import type { V1AuthSignInRequest } from '../../openapi/apis/AuthApi';
 import { FormControl, FormLabel, Input, Button, Box } from '@chakra-ui/react';
 
 export function Login() {
-    const navigate = useNavigate();
     const [email, setEmail] = useState('')
     const [password, setPassword] = useState('')
     const [showError, setShowError] = useState(false)
@@ -18,10 +17,8 @@ export function Login() {
             }
         }
         
-        authApiClient.v1AuthSignIn(request).then(() => {
-                navigate("/");
-            }).catch((_e) => {
-                setShowError(true);
+        authApiClient.v1AuthSignIn(request).catch((_error) => {
+            setShowError(true);
         });
     }
 
