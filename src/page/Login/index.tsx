@@ -1,11 +1,14 @@
-import { authApiClient } from '../../swr/client';
+import { authApiClient } from '../../api/client';
 import { useState } from 'react';
-import type { V1AuthSignInRequest} from '../../openapi/apis/AuthApi';
-import { FormControl, FormLabel, Input, Button } from '@chakra-ui/react';
+import { useNavigate } from "react-router-dom";
+import type { V1AuthSignInRequest } from '../../openapi/apis/AuthApi';
+import { FormControl, FormLabel, Input, Button, Box } from '@chakra-ui/react';
 
 export function Login() {
+    const navigate = useNavigate();
     const [email, setEmail] = useState('')
     const [password, setPassword] = useState('')
+    const [showError, setShowError] = useState(false)
 
     const login = async (email: string, password: string) => {
         const request :V1AuthSignInRequest  = {
@@ -14,7 +17,16 @@ export function Login() {
                 password: password
             }
         }
-        authApiClient.v1AuthSignIn(request);
+        
+        authApiClient.v1AuthSignIn(request).then(() => {
+                navigate("/");
+            }).catch((_e) => {
+                setShowError(true);
+        });
+    }
+
+    const verify = async () => {
+        authApiClient.v1AuthVerify();
     }
 
     return (
@@ -27,7 +39,9 @@ export function Login() {
                 <FormLabel>Password</FormLabel>
                 <Input value={password} type="password" onChange={(e) => setPassword(e.target.value)}/>
             </FormControl>
+            {showError? <Box>email or password is incorrect</Box> : <></>}
             <Button onClick={() => login(email, password)}>Login</Button>
+            <Button onClick={() => verify()}>Verify</Button>
         </>
     );
 }

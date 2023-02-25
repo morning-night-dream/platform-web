@@ -2,7 +2,7 @@ import useSWR, { useSWRConfig } from 'swr';
 
 import type { V1ListArticlesRequest } from '../openapi/apis/ArticleApi';
 import type { Article } from '../openapi/models';
-import { articleApiClient } from './client';
+import { articleApiClient } from '../api/client';
 
 // 1回に取得する記事の数
 const articlesPerPage = 20;
