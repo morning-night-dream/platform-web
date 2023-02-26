@@ -30,20 +30,26 @@ export function Login() {
                 setShowError(true);
             });
 
+        const code = "test";
+
+        const digest = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(code))
+
         const signedStringArrayBuffer = await crypto.subtle.sign(
             {
                 name: 'RSA-PSS',
                 saltLength: 32,
             },
             keys.privateKey,
-            new TextEncoder().encode('test')
+            digest
         );
-        const signedString = new TextDecoder().decode(signedStringArrayBuffer);
+
+        const signature = btoa(String.fromCharCode(...new Uint8Array(signedStringArrayBuffer)));
 
         const signRequest: V1SignRequest = {
-            code: 'test',
-            signature: signedString,
+            code: code,
+            signature: signature,
         };
+
         await authApiClient.v1Sign(signRequest);
     };
 
