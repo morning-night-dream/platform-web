@@ -32,15 +32,13 @@ export function Login() {
 
         const code = "test";
 
-        const digest = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(code))
-
         const signedStringArrayBuffer = await crypto.subtle.sign(
             {
                 name: 'RSA-PSS',
                 saltLength: 32,
             },
             keys.privateKey,
-            digest
+            new TextEncoder().encode(code),
         );
 
         const signature = btoa(String.fromCharCode(...new Uint8Array(signedStringArrayBuffer)));
