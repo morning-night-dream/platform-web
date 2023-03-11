@@ -39,7 +39,7 @@ function App() {
             .then(() => {
                 setIsLoggedIn(true);
             })
-            .catch((e) => {
+            .catch((e : AxiosError<V1UnauthorizedResponse>) => {
                 if (!e.response) {
                     return;
                 }
