@@ -15,11 +15,11 @@
 
 import * as runtime from '../runtime';
 import type {
-  ListArticleResponse,
+  V1ListArticleResponse,
 } from '../models';
 import {
-    ListArticleResponseFromJSON,
-    ListArticleResponseToJSON,
+    V1ListArticleResponseFromJSON,
+    V1ListArticleResponseToJSON,
 } from '../models';
 
 export interface V1ListArticlesRequest {
@@ -36,7 +36,7 @@ export class ArticleApi extends runtime.BaseAPI {
      * List articles
      * List articles
      */
-    async v1ListArticlesRaw(requestParameters: V1ListArticlesRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<ListArticleResponse>> {
+    async v1ListArticlesRaw(requestParameters: V1ListArticlesRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<V1ListArticleResponse>> {
         if (requestParameters.maxPageSize === null || requestParameters.maxPageSize === undefined) {
             throw new runtime.RequiredError('maxPageSize','Required parameter requestParameters.maxPageSize was null or undefined when calling v1ListArticles.');
         }
@@ -60,14 +60,14 @@ export class ArticleApi extends runtime.BaseAPI {
             query: queryParameters,
         }, initOverrides);
 
-        return new runtime.JSONApiResponse(response, (jsonValue) => ListArticleResponseFromJSON(jsonValue));
+        return new runtime.JSONApiResponse(response, (jsonValue) => V1ListArticleResponseFromJSON(jsonValue));
     }
 
     /**
      * List articles
      * List articles
      */
-    async v1ListArticles(requestParameters: V1ListArticlesRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<ListArticleResponse> {
+    async v1ListArticles(requestParameters: V1ListArticlesRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<V1ListArticleResponse> {
         const response = await this.v1ListArticlesRaw(requestParameters, initOverrides);
         return await response.value();
     }

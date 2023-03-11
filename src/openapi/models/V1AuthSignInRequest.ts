@@ -37,6 +37,12 @@ export interface V1AuthSignInRequest {
      * @memberof V1AuthSignInRequest
      */
     publicKey: string;
+    /**
+     * トークン有効期限(秒)
+     * @type {number}
+     * @memberof V1AuthSignInRequest
+     */
+    expiresIn?: number;
 }
 
 /**
@@ -64,6 +70,7 @@ export function V1AuthSignInRequestFromJSONTyped(json: any, ignoreDiscriminator:
         'email': json['email'],
         'password': json['password'],
         'publicKey': json['publicKey'],
+        'expiresIn': !exists(json, 'expiresIn') ? undefined : json['expiresIn'],
     };
 }
 
@@ -79,6 +86,7 @@ export function V1AuthSignInRequestToJSON(value?: V1AuthSignInRequest | null): a
         'email': value.email,
         'password': value.password,
         'publicKey': value.publicKey,
+        'expiresIn': value.expiresIn,
     };
 }
 

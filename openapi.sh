@@ -1,6 +1,6 @@
 #!/bin/bash
 
-BRANCH_NAME=feature/auth
+BRANCH_NAME=main
 
 docker run --rm -v ${PWD}:/local openapitools/openapi-generator-cli generate \
     -i https://raw.githubusercontent.com/morning-night-dream/platform-app/${BRANCH_NAME}/api/openapi.yaml \

@@ -15,21 +15,30 @@
 
 import * as runtime from '../runtime';
 import type {
-  UnauthorizedResponse,
+  V1AuthResignRequest,
   V1AuthSignInRequest,
   V1AuthSignUpRequest,
+  V1UnauthorizedResponse,
 } from '../models';
 import {
-    UnauthorizedResponseFromJSON,
-    UnauthorizedResponseToJSON,
+    V1AuthResignRequestFromJSON,
+    V1AuthResignRequestToJSON,
     V1AuthSignInRequestFromJSON,
     V1AuthSignInRequestToJSON,
     V1AuthSignUpRequestFromJSON,
     V1AuthSignUpRequestToJSON,
+    V1UnauthorizedResponseFromJSON,
+    V1UnauthorizedResponseToJSON,
 } from '../models';
 
 export interface V1AuthRefreshRequest {
     code: string;
+    signature: string;
+    expiresIn?: number;
+}
+
+export interface V1AuthResignOperationRequest {
+    v1AuthResignRequest: V1AuthResignRequest;
 }
 
 export interface V1AuthSignInOperationRequest {
@@ -59,10 +68,22 @@ export class AuthApi extends runtime.BaseAPI {
             throw new runtime.RequiredError('code','Required parameter requestParameters.code was null or undefined when calling v1AuthRefresh.');
         }
 
+        if (requestParameters.signature === null || requestParameters.signature === undefined) {
+            throw new runtime.RequiredError('signature','Required parameter requestParameters.signature was null or undefined when calling v1AuthRefresh.');
+        }
+
         const queryParameters: any = {};
 
         if (requestParameters.code !== undefined) {
             queryParameters['code'] = requestParameters.code;
+        }
+
+        if (requestParameters.signature !== undefined) {
+            queryParameters['signature'] = requestParameters.signature;
+        }
+
+        if (requestParameters.expiresIn !== undefined) {
+            queryParameters['expiresIn'] = requestParameters.expiresIn;
         }
 
         const headerParameters: runtime.HTTPHeaders = {};
@@ -83,6 +104,40 @@ export class AuthApi extends runtime.BaseAPI {
      */
     async v1AuthRefresh(requestParameters: V1AuthRefreshRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
         await this.v1AuthRefreshRaw(requestParameters, initOverrides);
+    }
+
+    /**
+     * リサイン(退会)
+     * リサイン(退会)
+     */
+    async v1AuthResignRaw(requestParameters: V1AuthResignOperationRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
+        if (requestParameters.v1AuthResignRequest === null || requestParameters.v1AuthResignRequest === undefined) {
+            throw new runtime.RequiredError('v1AuthResignRequest','Required parameter requestParameters.v1AuthResignRequest was null or undefined when calling v1AuthResign.');
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        headerParameters['Content-Type'] = 'application/json';
+
+        const response = await this.request({
+            path: `/v1/auth`,
+            method: 'DELETE',
+            headers: headerParameters,
+            query: queryParameters,
+            body: V1AuthResignRequestToJSON(requestParameters.v1AuthResignRequest),
+        }, initOverrides);
+
+        return new runtime.VoidApiResponse(response);
+    }
+
+    /**
+     * リサイン(退会)
+     * リサイン(退会)
+     */
+    async v1AuthResign(requestParameters: V1AuthResignOperationRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
+        await this.v1AuthResignRaw(requestParameters, initOverrides);
     }
 
     /**
@@ -130,7 +185,7 @@ export class AuthApi extends runtime.BaseAPI {
 
         const response = await this.request({
             path: `/v1/auth/signout`,
-            method: 'POST',
+            method: 'GET',
             headers: headerParameters,
             query: queryParameters,
         }, initOverrides);
