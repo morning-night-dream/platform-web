@@ -7,6 +7,10 @@ import { Login } from './page/Login';
 import { theme } from './theme';
 import { authApiClient } from './api/client';
 import { isLoggedInState } from './recoil/isLoggedIn';
+import { getPrivateKey } from './store';
+import { V1UnauthorizedResponse } from './openapi';
+import { importPrivateKey, sign } from './encrypt';
+import { AxiosError } from 'axios';
 
 const router = createBrowserRouter([
     {
@@ -19,6 +23,14 @@ const router = createBrowserRouter([
     },
 ]);
 
+async function refresh(code : string) {
+    const privateKeyStr = getPrivateKey();
+    const privateKey = await importPrivateKey(privateKeyStr);
+    const signedCode = await sign(privateKey, code);
+    const signature = btoa(String.fromCharCode(...new Uint8Array(signedCode)));
+    await authApiClient.v1AuthRefresh(code, signature);
+}
+
 function App() {
     const [isLoggedIn, setIsLoggedIn] = useRecoilState(isLoggedInState);
     useEffect(() => {
@@ -27,8 +39,14 @@ function App() {
             .then(() => {
                 setIsLoggedIn(true);
             })
-            .catch(() => {
-                setIsLoggedIn(false);
+            .catch((e) => {
+                if (!e.response) {
+                    return;
+                }
+
+                refresh(e.response.data.code).catch(() => {
+                    setIsLoggedIn(false);
+                });                
             });
     }, []);
 

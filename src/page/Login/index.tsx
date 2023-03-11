@@ -1,10 +1,10 @@
 import { useState } from 'react';
 import { useRecoilState } from 'recoil';
 import { FormControl, FormLabel, Input, Button, Box } from '@chakra-ui/react';
-import type { V1AuthSignInOperationRequest, V1SignRequest } from '../../openapi/apis/AuthApi';
+import type { V1AuthSignInRequest } from '../../openapi';
 import { authApiClient } from '../../api/client';
 import { isLoggedInState } from '../../recoil/isLoggedIn';
-import { generateKey } from '../../encrypt';
+import { generateKey, sign } from '../../encrypt';
 import { savePrivateKey } from '../../store';
 
 export function Login() {
@@ -15,8 +15,8 @@ export function Login() {
 
     const login = async (email: string, password: string) => {
         const keys = await generateKey();
-        const request: V1AuthSignInOperationRequest = {
-            v1AuthSignInRequest: { email, password, publicKey: btoa(keys.publicKeyStr) },
+        const request: V1AuthSignInRequest = {
+             email, password, publicKey: btoa(keys.publicKeyStr)
         };
 
         savePrivateKey(keys.privateKeyStr);
@@ -29,26 +29,6 @@ export function Login() {
             .catch((_error) => {
                 setShowError(true);
             });
-
-        const code = "test";
-
-        const signedStringArrayBuffer = await crypto.subtle.sign(
-            {
-                name: 'RSA-PSS',
-                saltLength: 32,
-            },
-            keys.privateKey,
-            new TextEncoder().encode(code),
-        );
-
-        const signature = btoa(String.fromCharCode(...new Uint8Array(signedStringArrayBuffer)));
-
-        const signRequest: V1SignRequest = {
-            code: code,
-            signature: signature,
-        };
-
-        await authApiClient.v1Sign(signRequest);
     };
 
     const verify = async () => {

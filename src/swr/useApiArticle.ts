@@ -1,7 +1,7 @@
 import useSWR, { useSWRConfig } from 'swr';
 
-import type { V1ListArticlesRequest } from '../openapi/apis/ArticleApi';
-import type { Article } from '../openapi/models';
+import type { V1ListArticleResponse } from '../openapi';
+import type { Article } from '../openapi/api';
 import { articleApiClient } from '../api/client';
 
 // 1回に取得する記事の数
@@ -20,22 +20,20 @@ const articlesState: ArticlesState = {
 export const useListArticles = () => {
     const key = `/api/v1/articles`;
 
-    const request: V1ListArticlesRequest = {
-        maxPageSize: articlesPerPage,
-        pageToken: articlesState.currentIndex ?? '',
-    };
-
-    const fetcher = async () => articleApiClient.v1ListArticles(request);
+    const fetcher = async () => articleApiClient.v1ListArticles(
+        articlesPerPage,
+        articlesState.currentIndex ?? '',
+    );
     const { data } = useSWR(key, fetcher);
 
-    const fetchedArticles = data?.articles ?? [];
+    const fetchedArticles = data?.data.articles ?? [];
     const existIds = new Set(articlesState.data.map((d) => d.id));
     const additionalArticles = fetchedArticles.filter((d) => !existIds.has(d.id));
     articlesState.data.push(...additionalArticles);
 
     // NextPageTokenが空の場合、もうこれ以上データがないのでcurrentIndexを更新しない
-    if (!(data?.nextPageToken === '')) {
-        articlesState.currentIndex = data?.nextPageToken;
+    if (!(data?.data.nextPageToken === '')) {
+        articlesState.currentIndex = data?.data.nextPageToken;
     }
 
     const { mutate } = useSWRConfig();
