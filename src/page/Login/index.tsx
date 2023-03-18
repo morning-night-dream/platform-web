@@ -1,39 +1,29 @@
-import { useState } from 'react';
-import { useRecoilState } from 'recoil';
+import { useState, useEffect } from 'react';
 import { FormControl, FormLabel, Input, Button, Box } from '@chakra-ui/react';
-import type { V1AuthSignInRequest } from '../../openapi';
-import { authApiClient } from '../../api/client';
-import { isLoggedInState } from '../../recoil/isLoggedIn';
-import { generateKey, sign } from '../../encrypt';
+import { generateKey } from '../../encrypt';
 import { savePrivateKey } from '../../store';
+import { v1AuthSignIn, useV1APIVersion } from '../../api';
 
 export function Login() {
-    const [_, setIsLoggedIn] = useRecoilState(isLoggedInState);
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
+    const [publicKey, setPublicKey] = useState('');
     const [showError, setShowError] = useState(false);
 
-    const login = async (email: string, password: string) => {
-        const keys = await generateKey();
-        const request: V1AuthSignInRequest = {
-             email, password, publicKey: btoa(keys.publicKeyStr)
-        };
+    const { mutate } = useV1APIVersion();
 
-        savePrivateKey(keys.privateKeyStr);
-
-        await authApiClient
-            .v1AuthSignIn(request)
-            .then(() => {
-                setIsLoggedIn(true);
-            })
-            .catch((_error) => {
-                setShowError(true);
-            });
-    };
-
-    const verify = async () => {
-        await authApiClient.v1AuthVerify();
-    };
+    useEffect(() => {
+        (async () => {
+            await generateKey()
+                .then((result) => {
+                    setPublicKey(result.publicKeyStr);
+                    savePrivateKey(result.privateKeyStr);
+                })
+                .catch((error) => {
+                    console.log(error);
+                });
+        })();
+    }, []);
 
     return (
         <>
@@ -58,8 +48,21 @@ export function Login() {
                 />
             </FormControl>
             {showError && <Box>email or password is incorrect</Box>}
-            <Button onClick={async () => login(email, password)}>Login</Button>
-            <Button onClick={async () => verify()}>Verify</Button>
+            <Button
+                onClick={async () => {
+                    await v1AuthSignIn({
+                        email,
+                        password,
+                        publicKey: btoa(publicKey),
+                    }).then(() => {
+                        mutate();
+                    }).catch(() => {
+                        setShowError(true);
+                    });
+                }}
+            >
+                Login
+            </Button>
         </>
     );
 }
