@@ -52,7 +52,7 @@ function App() {
                     setIsLoggedIn(false);
                 });
         })();
-    }, [error, data]);
+    }, [error]);
 
     return (
         <ChakraProvider theme={theme}>
