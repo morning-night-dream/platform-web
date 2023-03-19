@@ -21,7 +21,7 @@ const router = createBrowserRouter([
 
 function App() {
     const [isLoggedIn, setIsLoggedIn] = useState(false);
-    const { data, error } = useV1AuthVerify();
+    const { error } = useV1AuthVerify();
 
     useEffect(() => {
         (async () => {
@@ -37,7 +37,9 @@ function App() {
 
             const privateKey = getPrivateKey();
             const code = error.code;
-            const signature = await sign(code, privateKey);
+            const signature = await sign(code, privateKey).catch(() => {
+                return undefined;
+            });
 
             if (!signature) {
                 setIsLoggedIn(false);

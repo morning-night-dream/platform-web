@@ -54,11 +54,13 @@ export function Login() {
                         email,
                         password,
                         publicKey: btoa(publicKey),
-                    }).then(() => {
-                        mutate();
-                    }).catch(() => {
-                        setShowError(true);
-                    });
+                    })
+                        .then(async () => {
+                            await mutate();
+                        })
+                        .catch(() => {
+                            setShowError(true);
+                        });
                 }}
             >
                 Login
