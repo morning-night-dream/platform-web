@@ -43,6 +43,11 @@ function App() {
 
             const privateKey = getPrivateKey();
             const code = error.code;
+            if (code.length !== 36) {
+                setIsLoggedIn(false);
+                return;
+            }
+
             const signature = await sign(code, privateKey).catch(() => {
                 return undefined;
             });
