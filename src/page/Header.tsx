@@ -1,5 +1,6 @@
 import { Flex, Divider, Heading, Image, Center, Text, Button } from '@chakra-ui/react';
 import { v1AuthSignOut, useV1AuthVerify } from '../api';
+import { clear } from '../store';
 
 export type HeaderProps = Record<string, unknown>;
 
@@ -21,6 +22,7 @@ export function Header(props: HeaderProps) {
                         async () => {
                             await v1AuthSignOut();
                             await mutate();
+                            clear();
                         }   
                     }>
                         Sign Out

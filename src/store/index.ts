@@ -7,3 +7,7 @@ export function getPrivateKey(): string {
 export function savePrivateKey(privateKey: string) {
     localStorage.setItem(keyPrivateKey, privateKey);
 }
+
+export function clear() {
+    localStorage.clear();
+}
