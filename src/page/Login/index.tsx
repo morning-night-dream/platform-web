@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { FormControl, FormLabel, Input, Button, Box } from '@chakra-ui/react';
 import { generateKey } from '../../encrypt';
-import { savePrivateKey } from '../../store';
+import { savePrivateKey, getPrivateKey } from '../../store';
 import { v1AuthSignIn, useV1AuthVerify } from '../../api';
 
 export function Login() {
@@ -14,6 +14,11 @@ export function Login() {
 
     useEffect(() => {
         (async () => {
+            const existsPrivateKey = getPrivateKey();
+            if (existsPrivateKey) {
+                return;
+            }
+
             await generateKey()
                 .then((result) => {
                     setPublicKey(result.publicKeyStr);
