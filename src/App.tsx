@@ -71,7 +71,7 @@ function App() {
         <ChakraProvider theme={theme}>
             <BrowserRouter>
                 <Routes>
-                    <Route path="/login" element={<Login />} />
+                    <Route path="/login" element={isLoggedIn ? <Navigate to="/" /> : <Login />} />
                     <Route path="/" element={isLoggedIn ? <Article /> : <Navigate to="/login" />} />
                 </Routes>
             </BrowserRouter>
