@@ -55,6 +55,7 @@ export function Login() {
                         email,
                         password,
                         publicKey: btoa(publicKey),
+                        expiresIn: 30,
                     })
                         .then(async () => {
                             await mutate();
