@@ -50,6 +50,7 @@ export function Login() {
             {showError && <Box>email or password is incorrect</Box>}
             <Button
                 onClick={async () => {
+                    setShowError(false);
                     await v1AuthSignIn({
                         email,
                         password,
