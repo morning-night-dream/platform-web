@@ -18,13 +18,13 @@ export function Header(props: HeaderProps) {
                         </Center>
                     </Heading>
                     <Flex align="center" ml="auto" />
-                    <Button onClick={
-                        async () => {
+                    <Button
+                        onClick={async () => {
                             await v1AuthSignOut();
                             await mutate();
                             clear();
-                        }   
-                    }>
+                        }}
+                    >
                         Sign Out
                     </Button>
                 </Flex>
