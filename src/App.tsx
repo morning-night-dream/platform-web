@@ -22,11 +22,9 @@ const router = createBrowserRouter([
 function App() {
     const [isLoggedIn, setIsLoggedIn] = useState(false);
     const { error } = useV1AuthVerify({
-        swr : {
-            onErrorRetry: () => {
-                return;
-            }
-        }
+        swr: {
+            onErrorRetry() {},
+        },
     });
 
     useEffect(() => {
