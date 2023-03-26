@@ -7,7 +7,6 @@ import { v1AuthSignIn, useV1AuthVerify } from '../../api';
 export function Login() {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
-    const [publicKey, setPublicKey] = useState('');
     const [showError, setShowError] = useState(false);
 
     const { mutate } = useV1AuthVerify();
@@ -39,19 +38,22 @@ export function Login() {
                 onClick={async () => {
                     setShowError(false);
                     
-                    await generateKey()
-                    .then((result) => {
-                        setPublicKey(result.publicKeyStr);
-                        savePrivateKey(result.privateKeyStr);
-                    })
+                    const result = await generateKey()
                     .catch((error) => {
                         console.log(error);
                     });
 
+                    if (!result) {
+                        setShowError(true);
+                        return;
+                    }
+
+                    savePrivateKey(result.privateKeyStr);
+
                     await v1AuthSignIn({
                         email,
                         password,
-                        publicKey: btoa(publicKey),
+                        publicKey: btoa(result.publicKeyStr),
                         expiresIn: 30,
                     })
                         .then(async () => {
